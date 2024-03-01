@@ -137,6 +137,9 @@ void Receiver::setDirectSampling(int on) {
         case(3):
             std::cerr << "Enabled no-mod direct sampling mode." << std::endl;
             break;
+        default:
+            std::cerr << "No direct sampling mode." << std::endl;
+            break;
     }
 }
 
@@ -145,9 +148,9 @@ void Receiver::setPpm(int ppm_error) {
         return;
     auto r = rtlsdr_set_freq_correction(dev, ppm_error);
     if(r < 0)
-        std::cerr << "WARNING: Failed to set ppm error.\n";
+        std::cerr << "WARNING: Failed to set ppm error" << std::endl;
     else
-        std::cerr << "Tuner error set to " << ppm_error << "ppm.\n";
+        std::cerr << "Tuner error set to " << ppm_error << "ppm" << std::endl;
 }
 
 /**
@@ -165,21 +168,9 @@ void Receiver::setAgcMode(int on) {
         return;
     }
     if(on)
-        std::cerr << "AGC mode on\n";
+        std::cerr << "AGC mode on" << std::endl;
     else
-        std::cerr << "AGC mode off\n";
-}
-
-/**
- * @brief Метод для очиски буфера приемника. Необходимо вызывать каждый раз
- * перед чтением данных (асинхронным или синхронным)
- */
-
-void Receiver::resetBuffer() {
-    int r;
-    r = rtlsdr_reset_buffer(dev);
-    if(r < 0)
-        std::cerr << "WARNING: Failed to reset buffers " << r << std::endl;
+        std::cerr << "AGC mode off" << std::endl;
 }
 
 /**
@@ -193,16 +184,8 @@ void Receiver::setTunerBandwidth(uint32_t bw) {
     }
 }
 
-/**
- * @brief Метод для округление до ближайшей степни двойки вверх.
- * Он необходим для того, чтобы можно было правильно считать данные.
- */
-
-uint32_t Receiver::roundPowerTwo(uint32_t& size) {
-    auto result = size - 1;
-    for(unsigned k = 0; k <= 4; ++k)
-        result |= result >> (1 << k);
-    ++result;
-    return result;
-}
 Receiver::Receiver(rtlsdr_dev_t* dev) : dev(dev) { }
+
+Receiver::Receiver(rtlsdr_dev_t* dev, ReceiverSettings sett) : dev(dev) {
+    setSettingsReceiver(sett);
+}

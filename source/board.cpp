@@ -2,15 +2,21 @@
 
 #include "rtl-sdr.h"
 
-Board::Board(uint32_t numberDev) {
+Board::Board(std::size_t numberDev) {
     dev_index = numberDev;
     open();
 }
-std::shared_ptr<TransferControl> Board::getTransferControl(const TransferParams& params) {
+std::shared_ptr<TransferControl> Board::getTransferControl(TransferParams params) {
     return std::make_shared<TransferControl>(dev, params);
+}
+std::shared_ptr<TransferControl> Board::getTransferControl() {
+    return std::make_shared<TransferControl>(dev);
 }
 std::shared_ptr<Receiver> Board::getReceiver() {
     return std::make_shared<Receiver>(dev);
+}
+std::shared_ptr<Receiver> Board::getReceiver(ReceiverSettings set) {
+    return std::make_shared<Receiver>(dev, set);
 }
 
 void Board::open() {
@@ -20,7 +26,6 @@ void Board::open() {
         exit(1);
     } else {
         std::cerr << "Open device " << dev_index << std::endl;
-        ;
     }
 }
 void Board::close() {
@@ -34,4 +39,7 @@ void Board::close() {
     } else {
         std::cerr << "Close device " << dev_index << std::endl;
     }
+}
+Board::~Board() {
+    close();
 }

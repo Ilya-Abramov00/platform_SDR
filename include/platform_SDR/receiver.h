@@ -8,7 +8,6 @@ struct ReceiverSettings {
     int gain{0};
     int ppm_error{0};
     int agcMode{1};
-    uint32_t sampleCount;
     uint32_t centralFreq; // fc
     uint32_t sampleFreq;  // fd
 
@@ -18,7 +17,9 @@ struct ReceiverSettings {
 
 class Receiver {
 public:
-    Receiver(rtlsdr_dev_t* dev);
+    Receiver(rtlsdr_dev_t* dev, ReceiverSettings settings);
+    explicit Receiver(rtlsdr_dev_t* dev);
+
     ~Receiver() = default;
 
     void setSettingsReceiver(const ReceiverSettings& sett);
@@ -33,9 +34,7 @@ public:
     void setTunerBandwidth(uint32_t bw);
 
 private:
-    static uint32_t roundPowerTwo(uint32_t& size);
     int nearestGain(int gain);
 
-    void resetBuffer();
     rtlsdr_dev_t* dev{nullptr};
 };

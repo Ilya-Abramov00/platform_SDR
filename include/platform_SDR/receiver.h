@@ -1,5 +1,5 @@
 #pragma once
-#include "rtl-sdr.h"
+#include "rtl-sdr/rtl_sdr.h"
 
 #include <memory>
 

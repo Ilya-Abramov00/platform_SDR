@@ -1,12 +1,11 @@
 #pragma once
-#include "rtl-sdr.h"
 #include "transferparams.h"
 
 #include <complex>
 #include <functional>
 #include <memory>
 #include <thread>
-
+#include "rtl-sdr/rtl_sdr.h"
 class TransferControl {
 public:
     TransferControl(rtlsdr_dev_t* dev, TransferParams params);

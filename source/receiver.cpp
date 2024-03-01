@@ -1,6 +1,6 @@
 #include "platform_SDR/receiver.h"
 
-#include "rtl-sdr.h"
+#include "rtl-sdr/rtl_sdr.h"
 
 #include <iostream>
 #include <vector>
@@ -41,11 +41,7 @@ void Receiver::setSampleRate(uint32_t samp_rate) {
     if(r < 0) {
         std::cerr << "WARNING: Failed to set sample rate." << std::endl;
     }
-    auto Fs = rtlsdr_get_sample_rate(dev);
-    if(Fs <= 0) {
-        std::cerr << "WARNING: Failed to get sample rate." << std::endl;
-    }
-    std::cerr << "Sampling at " << double(Fs) / 1e6 << " МГц" << std::endl;
+    std::cerr << "Sampling at " << double(samp_rate) / 1e6 << " МГц" << std::endl;
 }
 
 /**

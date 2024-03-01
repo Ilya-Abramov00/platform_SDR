@@ -1,5 +1,7 @@
 #include "platform_SDR/platform.h"
-#include "rtl-sdr.h"
+
+
+#include "rtl-sdr/rtl_sdr.h"
 
 class RtlSdrDev {
 public:

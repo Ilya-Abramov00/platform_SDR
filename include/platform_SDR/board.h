@@ -11,11 +11,11 @@ class Board {
 public:
     Board(std::size_t numberDev);
 
-    std::shared_ptr<TransferControl> getTransferControl(TransferParams params);
-    std::shared_ptr<TransferControl> getTransferControl();
+    std::unique_ptr<TransferControl> getTransferControl(TransferParams params);
+    std::unique_ptr<TransferControl> getTransferControl();
 
-    std::shared_ptr<Receiver> getReceiver(ReceiverSettings settings);
-    std::shared_ptr<Receiver> getReceiver();
+    std::unique_ptr<Receiver> getReceiver(ReceiverSettings settings);
+    std::unique_ptr<Receiver> getReceiver();
 
     ~Board();
 

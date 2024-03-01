@@ -1,22 +1,22 @@
 #include "platform_SDR/board.h"
 
-#include "rtl-sdr.h"
+#include "rtl-sdr/rtl_sdr.h"
 
 Board::Board(std::size_t numberDev) {
     dev_index = numberDev;
     open();
 }
-std::shared_ptr<TransferControl> Board::getTransferControl(TransferParams params) {
-    return std::make_shared<TransferControl>(dev, params);
+std::unique_ptr<TransferControl> Board::getTransferControl(TransferParams params) {
+    return std::make_unique<TransferControl>(dev, params);
 }
-std::shared_ptr<TransferControl> Board::getTransferControl() {
-    return std::make_shared<TransferControl>(dev);
+std::unique_ptr<TransferControl> Board::getTransferControl() {
+    return std::make_unique<TransferControl>(dev);
 }
-std::shared_ptr<Receiver> Board::getReceiver() {
-    return std::make_shared<Receiver>(dev);
+std::unique_ptr<Receiver> Board::getReceiver() {
+    return std::make_unique<Receiver>(dev);
 }
-std::shared_ptr<Receiver> Board::getReceiver(ReceiverSettings set) {
-    return std::make_shared<Receiver>(dev, set);
+std::unique_ptr<Receiver> Board::getReceiver(ReceiverSettings set) {
+    return std::make_unique<Receiver>(dev, set);
 }
 
 void Board::open() {

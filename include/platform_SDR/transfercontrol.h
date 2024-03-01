@@ -28,7 +28,7 @@ private:
     bool getComplex(std::complex<int8_t>* complexBuff, std::size_t sizeOfBuff);
 
     rtlsdr_dev_t* dev{nullptr};
-
+    rtlsdr_read_async_cb_t callback;
     std::function<void(std::complex<int8_t>*, uint32_t)> process;
     TransferParams params;
     std::unique_ptr<std::thread> thread;

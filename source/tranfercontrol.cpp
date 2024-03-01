@@ -28,13 +28,13 @@ void TransferControl::stop() {
 }
 
 void TransferControl::startLoop() {
-    rtlsdr_read_async_cb_t callback = [](uint8_t* buf, uint32_t size, void* ctx) {
+     callback = [](uint8_t* buf, uint32_t size, void* ctx) {
         auto* d = reinterpret_cast<TransferControl*>(ctx); // контекст которые мы передали, кастим к объекту класса
 
         d->process((std::complex<signed char>*)buf, size);
     };
 
-    thread = std::make_unique<std::thread>([this, &callback]() {
+    thread = std::make_unique<std::thread>([this]() {
         resetBuffer(); // должен быть обязательно!!
 
         auto r = rtlsdr_read_async(dev, callback, this, params.ircSize,

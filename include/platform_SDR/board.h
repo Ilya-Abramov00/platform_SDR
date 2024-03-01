@@ -1,8 +1,7 @@
 #pragma once
-#include "rtl-sdr.h"
+#include "receiver.h"
 #include "transfercontrol.h"
 #include "transferparams.h"
-#include "receiver.h"
 
 #include <iostream>
 #include <map>
@@ -15,9 +14,12 @@ public:
     std::shared_ptr<TransferControl> getTransferControl(const TransferParams& params);
     std::shared_ptr<Receiver> getReceiver();
 
-    ~Board();
+    ~Board() = default;
 
 private:
-    struct Pimpl;
-    std::unique_ptr<Pimpl> m_d;
+    int dev_index{0};
+    rtlsdr_dev_t* dev{nullptr};
+
+    void open();
+    void close();
 };

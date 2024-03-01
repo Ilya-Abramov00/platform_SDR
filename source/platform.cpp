@@ -1,6 +1,5 @@
 #include "platform_SDR/platform.h"
-
-
+#include "rtl-sdr.h"
 
 class RtlSdrDev {
 public:
@@ -26,14 +25,13 @@ public:
 PlatformSDR::PlatformSDR() {
     availableDevise = RtlSdrDev::deviceSearch();
 }
-auto PlatformSDR::getBoard() {
+std::shared_ptr<Board> PlatformSDR::getBoard() {
     if(!availableDevise) {
         throw std::runtime_error("ERROR: Нет доступных устройст");
     }
-    auto ptr = std::make_unique<Board>(availableDevise - 1);
+    auto ptr = std::make_shared<Board>(availableDevise - 1);
     collectionBoard.insert({availableDevise, std::move(ptr)});
     availableDevise--;
 
-    return collectionBoard.find(availableDevise + 1);
+    return collectionBoard.at(availableDevise + 1);
 }
-

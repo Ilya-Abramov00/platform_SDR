@@ -1,29 +1,37 @@
 #include "platform_SDR/board.h"
 
-struct Board::Pimpl {
-    void open();
-    int dev_index{0};
-    int dev_given{0};
-    uint32_t samCount;
-    rtlsdr_dev_t* dev{nullptr};
-    int do_exit{0};
-    rtlsdr_read_async_cb_t callback;
-
-    int setCenterFreq(uint32_t freq);
-    int setSampleRate(uint32_t samp_rate);
-    int setAutoGain();
-    int nearestGain(int gain);
-    int setGain(int gain);
-    int setDirectSampling(int on);
-    int setPpm(int ppm_error);
-    void setAgcMode(int on);
-    void setOffsetTuningOn();
-    int resetBuffer();
-    int setTunerBandwidth(uint32_t bw);
-    static uint32_t roundPowerTwo(uint32_t& size);
-};
+#include "rtl-sdr.h"
 
 Board::Board(uint32_t numberDev) {
-    m_d->dev_index = numberDev;
-    m_d->open();
+    dev_index = numberDev;
+    open();
+}
+std::shared_ptr<TransferControl> Board::getTransferControl(const TransferParams& params) {
+    return std::make_shared<TransferControl>(dev, params);
+}
+std::shared_ptr<Receiver> Board::getReceiver() {
+    return std::make_shared<Receiver>(dev);
+}
+
+void Board::open() {
+    int r = rtlsdr_open(&dev, (uint32_t)dev_index);
+    if(r < 0) {
+        std::cerr << "Failed to open rtlsdr device" << dev_index << std::endl;
+        exit(1);
+    } else {
+        std::cerr << "Open device " << dev_index << std::endl;
+        ;
+    }
+}
+void Board::close() {
+    auto r = rtlsdr_reset_buffer(dev);
+    if(r < 0)
+        std::cerr << "WARNING: Failed to reset buffers" << std::endl;
+
+    r = rtlsdr_close(dev);
+    if(r < 0) {
+        std::cerr << "FAIL close: " << r << std::endl;
+    } else {
+        std::cerr << "Close device " << dev_index << std::endl;
+    }
 }

@@ -1,8 +1,8 @@
 #pragma once
-
-#include "memory"
 #include "rtl-sdr.h"
-#include "thread"
+
+#include <memory>
+
 struct ReceiverSettings {
     int direct_sampling{0};
     int gain{0};
@@ -18,12 +18,24 @@ struct ReceiverSettings {
 
 class Receiver {
 public:
-    Receiver();
-    ~Receiver();
+    Receiver(rtlsdr_dev_t* dev);
+    ~Receiver() = default;
 
-    void setSettingsReceiver(ReceiverSettings* sett);
+    void setSettingsReceiver(const ReceiverSettings& sett);
+
+    void setCenterFreq(uint32_t freq);
+    void setSampleRate(uint32_t samp_rate);
+    void setAutoGain();
+    void setGain(int gain);
+    void setDirectSampling(int on);
+    void setPpm(int ppm_error);
+    void setAgcMode(int on);
+    void setTunerBandwidth(uint32_t bw);
 
 private:
-    struct Pimpl;
-    std::unique_ptr<Pimpl> m_d;
+    static uint32_t roundPowerTwo(uint32_t& size);
+    int nearestGain(int gain);
+
+    void resetBuffer();
+    rtlsdr_dev_t* dev{nullptr};
 };

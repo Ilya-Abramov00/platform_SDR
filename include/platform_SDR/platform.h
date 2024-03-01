@@ -7,11 +7,11 @@
 class PlatformSDR {
 public:
     PlatformSDR();
-    ~PlatformSDR();
+    ~PlatformSDR()=default;
 
-    auto getBoard();
+    std::shared_ptr<Board> getBoard();
 
 private:
     std::size_t availableDevise;
-    std::map<std::size_t, std::unique_ptr<Board>> collectionBoard;
+    std::map<std::size_t, std::shared_ptr<Board>> collectionBoard;
 };
